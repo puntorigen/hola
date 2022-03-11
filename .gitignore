@@ -1,0 +1,9 @@
+.env
+/index.js
+/node_modules
+/candidates
+/package-lock.json
+/sessions.json
+/new_*.json
+/logo2.png
+/templates.js

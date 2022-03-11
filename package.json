@@ -1,0 +1,77 @@
+{
+  "name": "hola",
+  "version": "0.0.1",
+  "description": "Personalized Recruiter Bot for searching, filtering and inviting targeted Linkedin profiles",
+  "main": "index.js",
+  "bin": "bin/cli",
+  "types": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development rollup -c && npm link",
+    "build": "cross-env NODE_ENV=production rollup -c && npm link",
+    "format": "prettier --write '**/*.{js,ts}'",
+    "postinstall": "patch-package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puntorigen/hola.git"
+  },
+  "keywords": [
+    "hola",
+    "bot",
+    "linkedin",
+    "recruiter"
+  ],
+  "author": "Pablo Schaffner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/puntorigen/hola/issues"
+  },
+  "homepage": "https://github.com/puntorigen/hola#readme",
+  "dependencies": {
+    "@concepto/console": "^1.2.67",
+    "alasql": "^1.7.3",
+    "capitalize": "^2.0.4",
+    "cli-progress": "^3.9.1",
+    "colors": "^1.4.0",
+    "dotenv": "^16.0.0",
+    "download-file-with-progressbar": "^1.2.3",
+    "extractjs": "^0.3.1",
+    "find-root": "^1.1.0",
+    "fs-extra": "^10.0.0",
+    "keyword-extractor": "^0.0.21",
+    "linkedin-private-api": "^1.1.1",
+    "minimist": "^1.2.5",
+    "mute": "^2.0.6",
+    "node-async-exec": "^1.2.0",
+    "patch-package": "^6.4.7",
+    "pretty-ms": "^7.0.1",
+    "prompts": "^2.4.2",
+    "puppeteer": "^13.4.1",
+    "puppeteer-extra": "^3.2.3",
+    "puppeteer-extra-plugin-stealth": "^2.9.0",
+    "qid": "^0.9.12",
+    "temp-dir": "^2.0.0",
+    "tiny-cli-editor": "^0.1.1",
+    "tiny-timer": "^1.6.0",
+    "ts-enum-util": "^4.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@rollup/plugin-babel": "^5.1.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@types/node": "^16.11.11",
+    "cross-env": "^7.0.2",
+    "jsdoc-to-markdown": "^7.0.0",
+    "rollup": "^2.23.1",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.2"
+  },
+  "scarfSettings": {
+    "enabled": false
+  }
+}
