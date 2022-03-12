@@ -11,7 +11,7 @@ export default class Command {
     finish(exitcode?: number): void;
     ask(question: string, validation?: any): Promise<any>;
     choose(question: string, options: options[], selected?: number): Promise<any>;
-    multipleChoice(question: string, options: options[], max?: number, hint?: string): Promise<any>;
+    multi(question: string, options: options[], max?: number, hint?: string): Promise<any>;
     logPrefix(prefix: string, color?: colors): void;
     log(message: string, color?: colors, data?: any): void;
     debug(message: string, data?: any): void;

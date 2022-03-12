@@ -51,7 +51,7 @@ export default class Templates extends Command {
             questions.keywords = await this.ask(`Enter the keywords for searching new members:`);
             questions.keywords_exclude = await this.ask(`Enter the keywords that profiles shouldn't have:`);
             const countries = $enum(CountryType).map((value)=>({ title:CountryType[value], value }) );
-            questions.countries = await this.multipleChoice(`What countries should the people be from?`, countries, 3);
+            questions.countries = await this.multi(`What countries should the people be from?`, countries, 3);
             questions.exclude = await this.ask(`List people to exclude (comma delimited):`);
             if (questions.exclude!='') questions.exclude=questions.exclude.split(','); 
             questions.messageNow = await this.choose(`Do you want to add a message template now?`,[{ title:'Yes',value:true },{ title:'No',value:false }]);
@@ -69,14 +69,14 @@ export default class Templates extends Command {
                 questions.message = questions.message.filter(String).join('\n'); //(item)=>(item.trim()!='')
             }
             //add to DB
-            let add = await db.push('templates',{ name:questions.name, 
-                                        exclude:questions.keywords_exclude, //exclude keywords from profiles 
-                                        country:questions.countries,
-                                        exclude_people:questions.exclude,   //don't include this people
-                                        max_grow:10,
-                                        max_invite:30,
-                                        invitation_message: questions.message
-                                    });
+            let add = db.push('templates',{ name:questions.name, 
+                                            exclude:questions.keywords_exclude, //exclude keywords from profiles 
+                                            country:questions.countries,
+                                            exclude_people:questions.exclude,   //don't include this people
+                                            max_grow:10,
+                                            max_invite:30,
+                                            invitation_message: questions.message
+                                        });
             this.debug('added ',add);
             await db.save();
             //

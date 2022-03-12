@@ -75,7 +75,7 @@ export default class Command {
         return resp;
     }
 
-    async multipleChoice(question:string, options:options[], max:number=0, hint?:string) {
+    async multi(question:string, options:options[], max:number=0, hint?:string) {
         const resp = (
             await prompts({
                 type: 'multiselect',

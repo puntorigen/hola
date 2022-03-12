@@ -39,21 +39,27 @@ export class DB {
     }
     
     async init() {
-        if (!this.data.schema['testing']) this.data.schema['testing'] = {
-            email:'',
-            num:0,
-            date:new Date()
-        } as schemaTesting;
-        if (!this.data.schema['templates']) this.data.schema['templates'] = {
-            name:'',
-            keywords:'',
-            exclude:'',
-            country:[CountryType.Chile,CountryType.USA,CountryType.Argentina],
-            exclude_people:'',
-            max_grow:5,
-            max_invite:5,
-            invitation_message:''
-        } as schemaTemplates;
+        if (!this.data.schema['testing']) {
+            this.data.values['testing'] = [];
+            this.data.schema['testing'] = {
+                email:'',
+                num:0,
+                date:new Date()
+            } as schemaTesting;
+        }
+        if (!this.data.schema['templates']) {
+            this.data.values['templates'] = [];
+            this.data.schema['templates'] = {
+                name:'',
+                keywords:'',
+                exclude:'',
+                country:[CountryType.Chile,CountryType.USA,CountryType.Argentina],
+                exclude_people:'',
+                max_grow:5,
+                max_invite:5,
+                invitation_message:''
+            } as schemaTemplates;
+        }
         if (!this.data.schema['profiles']) this.data.schema['profiles'] = {
             firstName:'',
             lastName:'',
@@ -106,7 +112,7 @@ export class DB {
         return true;
     }
 
-    async push(table:string,data:any) {
+    push(table:string,data:any) {
         //get table schema
         if (table in this.data.schema) {
             //check that given data fields exist and are of the same type of schema
@@ -114,7 +120,6 @@ export class DB {
             if (!valid) return false;
             if (!this.data.values[table]) this.data.values[table]=[];
             this.data.values[table].push(data);
-            await this.save();
             return true;
         } else {
             //table doesn't exist
