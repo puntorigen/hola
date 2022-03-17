@@ -1,6 +1,7 @@
 import babel            from '@rollup/plugin-babel';
 import { nodeResolve }  from '@rollup/plugin-node-resolve';
 import typescript       from 'rollup-plugin-typescript2';
+import keysTransformer from 'ts-transformer-keys/transformer';
 
 const config = {
   input: 'src/index.ts',
@@ -19,7 +20,11 @@ const config = {
         declarationDir: "lib/",
         declarationMap: true,
         experimentalDecorators: true,
-        exclude: ['test']
+        exclude: ['test'],
+        transformers: [service=>({
+          before: [ keysTransformer(service.getProgram())],
+          after: []
+        })]
     }),
     babel({
       presets: [

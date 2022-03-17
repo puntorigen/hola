@@ -70,6 +70,7 @@ export default class Templates extends Command {
             }
             //add to DB
             let add = db.push('templates',{ name:questions.name, 
+                                            keywords:questions.keywords,
                                             exclude:questions.keywords_exclude, //exclude keywords from profiles 
                                             country:questions.countries,
                                             exclude_people:questions.exclude,   //don't include this people

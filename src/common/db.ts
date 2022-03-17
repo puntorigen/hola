@@ -6,6 +6,7 @@
 
 import helper from './helper'
 import { CountryType,LanguageType } from '../common/linkedin'
+import { keys } from 'ts-transformer-keys';
 const prompts = require('prompts');
 const query = require('alasql').promise
 const path = require('path');
@@ -22,10 +23,23 @@ export interface schemaTemplates {
     name: string,
     exclude: string,
     country: CountryType[],
-    exclude_people: string,
+    exclude_people: string[],
     max_grow?: number,
     max_invite?: number,
     invitation_message: string[] | string
+}
+export interface schemaProfiles {
+    firstName: string,
+    lastName: string,
+    sourceUserName: string,
+    templateUsed: string,
+    status: 'invited'|'message_sent'|'answered',
+    invitationSent: boolean,
+    invitationDate?: Date,
+    messageSent: false,
+    messageDate?: Date,
+    distance: number,
+    dateAdded: Date
 }
 
 export class DB {
@@ -40,39 +54,22 @@ export class DB {
     
     async init() {
         if (!this.data.schema['testing']) {
+            const keys_ = keys<schemaTesting>();
+            console.log('initializing testing schema')
             this.data.values['testing'] = [];
-            this.data.schema['testing'] = {
-                email:'',
-                num:0,
-                date:new Date()
-            } as schemaTesting;
+            this.data.schema['testing'] = keys_;
         }
         if (!this.data.schema['templates']) {
+            const keys_ = keys<schemaTemplates>();
+            console.log('initializing templates schema')
             this.data.values['templates'] = [];
-            this.data.schema['templates'] = {
-                name:'',
-                keywords:'',
-                exclude:'',
-                country:[CountryType.Chile,CountryType.USA,CountryType.Argentina],
-                exclude_people:'',
-                max_grow:5,
-                max_invite:5,
-                invitation_message:''
-            } as schemaTemplates;
+            this.data.schema['templates'] = keys_;
         }
-        if (!this.data.schema['profiles']) this.data.schema['profiles'] = {
-            firstName:'',
-            lastName:'',
-            sourceUserName:'',
-            templateUsed:'',
-            status:['invited','message_sent','answered'],
-            invitationSent: false,
-            invitationDate: new Date(),
-            messageSent: false,
-            messageDate: new Date(),
-            distance: 2,
-            dateAdded: new Date()
-        };
+        if (!this.data.schema['profiles']) {
+            const keys_ = keys<schemaProfiles>();
+            this.data.values['profiles'] = [];
+            this.data.schema['profiles'] = keys_;
+        }
         await this.save();
     }
 
@@ -83,31 +80,18 @@ export class DB {
             await this.init();
         } else {
             this.data = await helper_.readFile(file);
+            await this.init();
         }
-        await this.init();
     }
 
     async save() {
         await helper_.writeFile(this.file,JSON.stringify(this.data));
     }
 
-    validateSchema(schema:any,data:any) {
-        const schemaKeys = Object.keys(schema);
-        for (let key of schemaKeys) {
-            if (data[key] && typeof schema[key] !== typeof data[key]) {
-                if (typeof schema[key] == 'object' && typeof data[key] == 'string') {
-                    //test if value of data[key] is within 'object' schema || alternative option
-                    if (schema[key].includes(data[key])) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else if (!data[key]) {
-                return false;
-            }
+    validateSchemaKeys(schema:any,data:any) {
+        const dataKeys = Object.keys(data);
+        for (let key of dataKeys) {
+            if (!schema.includes(key)) return false;
         }
         return true;
     }
@@ -116,7 +100,8 @@ export class DB {
         //get table schema
         if (table in this.data.schema) {
             //check that given data fields exist and are of the same type of schema
-            const valid = this.validateSchema(this.data.schema[table],data);
+            const valid = this.validateSchemaKeys(this.data.schema[table],data);
+            //console.log('valid data for table',{table,data,valid});
             if (!valid) return false;
             if (!this.data.values[table]) this.data.values[table]=[];
             this.data.values[table].push(data);

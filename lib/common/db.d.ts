@@ -13,10 +13,23 @@ export interface schemaTemplates {
     name: string;
     exclude: string;
     country: CountryType[];
-    exclude_people: string;
+    exclude_people: string[];
     max_grow?: number;
     max_invite?: number;
     invitation_message: string[] | string;
+}
+export interface schemaProfiles {
+    firstName: string;
+    lastName: string;
+    sourceUserName: string;
+    templateUsed: string;
+    status: 'invited' | 'message_sent' | 'answered';
+    invitationSent: boolean;
+    invitationDate?: Date;
+    messageSent: false;
+    messageDate?: Date;
+    distance: number;
+    dateAdded: Date;
 }
 export declare class DB {
     x_console: any;
@@ -27,8 +40,8 @@ export declare class DB {
     init(): Promise<void>;
     load(file?: string): Promise<void>;
     save(): Promise<void>;
-    validateSchema(schema: any, data: any): boolean;
-    push(table: string, data: any): Promise<boolean>;
+    validateSchemaKeys(schema: any, data: any): boolean;
+    push(table: string, data: any): boolean;
     filter(table: string, filter: any): false | any[];
     get(table: string): any;
     query(sql: string): Promise<any>;

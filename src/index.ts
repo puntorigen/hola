@@ -19,11 +19,11 @@ export default class hola {
 
     constructor(arg: { silent?: boolean } = { silent: true }) {}
 
-    /*@command(`Runs database tests`,[])
+    @command(`Runs database tests`,[])
     async test(arg: any) {
         //test db
         await (new cmds.TestDB(arg)).run();
-    }*/
+    }
 
     @command(`Manage locally saved templates for the BOT to use`,[])
     async templates(arg: any) {

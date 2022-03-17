@@ -17,16 +17,18 @@ export default class TestDB extends Command {
     async process() {
         console.log('args',this.arg);
         let db = new DB(); await db.load();
-        await db.push('testing',{
+        let test1 = await db.push('testing',{
             email: 'p@p.com',
             num:2,
             date: new Date()
         } as schemaTesting);
-        await db.push('testing',{
+        console.log('test1',test1);
+        let test2 = await db.push('testing',{
             email: 'papu@pepe.com',
             num:5,
             date: new Date()
         } as schemaTesting);
+        console.log('test2',test2);
         let get_table = db.get('testing');
         this.debug('full testing',get_table);
         //let get = await db.filter('testing',{ num:5 })[0].update({ num:4 });

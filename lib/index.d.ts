@@ -9,6 +9,7 @@ export default class hola {
     constructor(arg?: {
         silent?: boolean;
     });
+    test(arg: any): Promise<void>;
     templates(arg: any): Promise<void>;
     grow(arg: any): Promise<void>;
 }
