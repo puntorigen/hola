@@ -1,5 +1,5 @@
 import Command from '../common/command'
-import { DB,schemaTesting } from '../common/db'
+import { DB,testingFields } from '../common/db'
 import { CountryType } from '../common/linkedin';
 import { $enum } from 'ts-enum-util';
 
@@ -41,7 +41,7 @@ export default class Templates extends Command {
     async process() {
         let db = new DB(); await db.load();
         let questions:any = {};
-        let templates = await db.get('templates');
+        let templates = await db.table('templates');
         //choose action: arg._ ? list (default),create,delete
         if (this.arg._.length>0) questions.name = this.arg._.shift(); 
         if (this.action=='list') {
@@ -49,14 +49,14 @@ export default class Templates extends Command {
         } else if (this.action=='create') {
             if (!questions.name) questions.name = await this.ask(`How do you plan to name this new template?`);
             questions.keywords = await this.ask(`Enter the keywords for searching new members:`);
-            questions.keywords_exclude = await this.ask(`Enter the keywords that profiles shouldn't have:`);
+            questions.exclude = await this.ask(`Enter the keywords that profiles shouldn't have:`);
             const countries = $enum(CountryType).map((value)=>({ title:CountryType[value], value }) );
-            questions.countries = await this.multi(`What countries should the people be from?`, countries, 3);
-            questions.exclude = await this.ask(`List people to exclude (comma delimited):`);
-            if (questions.exclude!='') questions.exclude=questions.exclude.split(','); 
+            questions.country = await this.multi(`What countries should the people be from?`, countries, 3);
+            questions.exclude_people = await this.ask(`List people to exclude (comma delimited):`);
+            if (questions.exclude_people!='') questions.exclude_people=questions.exclude_people.split(','); 
             questions.messageNow = await this.choose(`Do you want to add a message template now?`,[{ title:'Yes',value:true },{ title:'No',value:false }]);
             this.debug('You can use variables: {firstName}, {lastName}, {myFirstName}');
-            questions.message = '';
+            questions.invitation_message = '';
             if (questions.messageNow) {
                 questions.message = [];
                 for (const x of new Array(100)) {
@@ -66,17 +66,17 @@ export default class Templates extends Command {
                         if (questions.message[questions.message.length-1]=='' && questions.message[questions.message.length-2]=='') break;
                     }
                 }
-                questions.message = questions.message.filter(String).join('\n'); //(item)=>(item.trim()!='')
+                questions.invitation_message = questions.message.filter(String).join('\n'); //(item)=>(item.trim()!='')
             }
             //add to DB
-            let add = db.push('templates',{ name:questions.name, 
+            let add = db.add('templates',{  name:questions.name, 
                                             keywords:questions.keywords,
-                                            exclude:questions.keywords_exclude, //exclude keywords from profiles 
-                                            country:questions.countries,
-                                            exclude_people:questions.exclude,   //don't include this people
+                                            exclude:questions.exclude, //exclude keywords from profiles 
+                                            country:questions.country,
+                                            exclude_people:questions.exclude_people,   //don't include this people
                                             max_grow:10,
                                             max_invite:30,
-                                            invitation_message: questions.message
+                                            invitation_message: questions.invitation_message
                                         });
             this.debug('added ',add);
             await db.save();

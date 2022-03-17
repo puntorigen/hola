@@ -4,12 +4,13 @@
  * @module 	db
  **/
 import { CountryType } from '../common/linkedin';
-export interface schemaTesting {
+export interface testingFields {
     email: string;
     num: number;
     date: Date;
 }
-export interface schemaTemplates {
+export interface templatesFields {
+    keywords: string;
     name: string;
     exclude: string;
     country: CountryType[];
@@ -18,7 +19,7 @@ export interface schemaTemplates {
     max_invite?: number;
     invitation_message: string[] | string;
 }
-export interface schemaProfiles {
+export interface profilesFields {
     firstName: string;
     lastName: string;
     sourceUserName: string;
@@ -41,9 +42,9 @@ export declare class DB {
     load(file?: string): Promise<void>;
     save(): Promise<void>;
     validateSchemaKeys(schema: any, data: any): boolean;
-    push(table: string, data: any): boolean;
-    filter(table: string, filter: any): false | any[];
-    get(table: string): any;
+    add(table: string, data: testingFields | templatesFields | profilesFields): boolean;
+    search(table: string, filter: any): false | any[];
+    table(table: string): any;
     query(sql: string): Promise<any>;
 }
 //# sourceMappingURL=db.d.ts.map

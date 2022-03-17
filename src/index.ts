@@ -42,14 +42,6 @@ export default class hola {
                 required:'Please enter your #LinkedIn password#:',
                 type:'password',
                 env:'LINKEDIN_PASS'
-            }],
-            ['-t', '--template', `Template to use`,{ 
-                required:'Please select a template:',
-                options: [
-                    {   title:'backend', value:'backend', description:`Backend developer` },
-                    {   title:'frontend', value:'frontend', description:`Frontend developer` },
-                    {   title:'fullstack', value:'fullstack', description:`Fullstack developer` }
-                ]
             }]
         ]
     )

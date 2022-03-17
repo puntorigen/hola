@@ -13,13 +13,21 @@ const path = require('path');
 const root = require('find-root')(__dirname)
 const helper_ = new helper()
 
-export interface schemaTesting {
+//add table keys below for new tables
+const tables = {
+    testing:    keys<testingFields>(),
+    templates:  keys<templatesFields>(),
+    profiles:   keys<profilesFields>(),
+};
+
+export interface testingFields {
     email: string,
     num:number,
     date:Date
 }
 
-export interface schemaTemplates {
+export interface templatesFields {
+    keywords: string,
     name: string,
     exclude: string,
     country: CountryType[],
@@ -28,7 +36,7 @@ export interface schemaTemplates {
     max_invite?: number,
     invitation_message: string[] | string
 }
-export interface schemaProfiles {
+export interface profilesFields {
     firstName: string,
     lastName: string,
     sourceUserName: string,
@@ -53,23 +61,12 @@ export class DB {
     }
     
     async init() {
-        if (!this.data.schema['testing']) {
-            const keys_ = keys<schemaTesting>();
-            console.log('initializing testing schema')
-            this.data.values['testing'] = [];
-            this.data.schema['testing'] = keys_;
-        }
-        if (!this.data.schema['templates']) {
-            const keys_ = keys<schemaTemplates>();
-            console.log('initializing templates schema')
-            this.data.values['templates'] = [];
-            this.data.schema['templates'] = keys_;
-        }
-        if (!this.data.schema['profiles']) {
-            const keys_ = keys<schemaProfiles>();
-            this.data.values['profiles'] = [];
-            this.data.schema['profiles'] = keys_;
-        }
+        Object.keys(tables).map((table)=>{
+            this.data.schema[table] = tables[table]; 
+            if (!this.data.values[table]) {
+                this.data.values[table] = [];
+            }
+        });
         await this.save();
     }
 
@@ -91,28 +88,32 @@ export class DB {
     validateSchemaKeys(schema:any,data:any) {
         const dataKeys = Object.keys(data);
         for (let key of dataKeys) {
-            if (!schema.includes(key)) return false;
+            if (!schema.includes(key)) {
+                console.log('schema no incluye key',{schema,key});
+                return false;
+            }
         }
         return true;
     }
 
-    push(table:string,data:any) {
+    add(table:string,data:testingFields|templatesFields|profilesFields) {
         //get table schema
         if (table in this.data.schema) {
             //check that given data fields exist and are of the same type of schema
             const valid = this.validateSchemaKeys(this.data.schema[table],data);
-            //console.log('valid data for table',{table,data,valid});
+            console.log('valid data for table',{table,data,valid});
             if (!valid) return false;
             if (!this.data.values[table]) this.data.values[table]=[];
             this.data.values[table].push(data);
             return true;
         } else {
             //table doesn't exist
+            console.log('table '+table+', doesnt exist');
             return false;
         }
     }
 
-    filter(table:string,filter:any) {
+    search(table:string,filter:any) {
         //ex 'templates', filter:{ country:'Chile' }
         if (!this.data.values[table]) return false;
         let resp = [...this.data.values[table]];
@@ -127,7 +128,7 @@ export class DB {
         resp = resp.map((item)=>{
             return {
                 value:item,
-                update: (data) => {
+                _update: (data) => {
                     this.data.values[table].map((row,idx)=>{
                         if (row==item) this.data.values[table][idx] = {...this.data.values[table][idx],...data};
                     });
@@ -138,7 +139,7 @@ export class DB {
         return resp;
     }
 
-    get(table:string) {
+    table(table:string) {
         if (this.data.schema[table] && !this.data.values[table]) return [];
         if (!this.data.values[table]) return false;
         return this.data.values[table];

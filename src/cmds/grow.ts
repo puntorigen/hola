@@ -1,5 +1,5 @@
 import Command from '../common/command'
-import { DB } from '../common/db'
+import { DB,profilesFields } from '../common/db'
 import { LinkedIn,CountryType,LanguageType } from '../common/linkedin'
 
 export default class Grow extends Command {
@@ -27,7 +27,7 @@ export default class Grow extends Command {
         const newUsersProfile = await linkedin.createProfileSearch({keywords:'software engineer nodejs ts', country:CountryType.Chile, language:LanguageType.English, distance:2 });
         const newUsers = await linkedin.searchPeople(newUsersProfile, 10, 'CEO,founder,owner,recruiter');
         newUsers.map(async (person)=>{
-            await db.push('profiles',{ 
+            await db.add('profiles',{ 
                 firstName:person.firstName, 
                 lastName:person.lastName,
                 sourceUserName:this.arg.user,
