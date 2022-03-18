@@ -25,7 +25,7 @@ export default class hola {
         await (new cmds.TestDB(arg)).run();
     }
 
-    @command(`Manage locally saved templates for the BOT to use`,[])
+    @command(`Manage locally saved templates for the BOT to use`,[[]],'[create|list]')
     async templates(arg: any) {
         //manage templates: list, create, delete
         await (new cmds.Templates(arg)).run();
@@ -43,7 +43,8 @@ export default class hola {
                 type:'password',
                 env:'LINKEDIN_PASS'
             }]
-        ]
+        ],
+        '[options]\t'
     )
     async grow(arg: any) {
         //console.log('usage dump',this.usage);

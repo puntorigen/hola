@@ -1,6 +1,8 @@
 import Command from '../common/command'
 import { LinkedIn,CountryType,LanguageType } from '../common/linkedin'
 
+//sends message invitation to people in your network without
+//previous conversations with you
 export default class Invite extends Command {
 
     async init() {
@@ -11,9 +13,6 @@ export default class Invite extends Command {
             '@':'green',
             '!':'brightRed'
         });
-        //define defaults
-        //if (!this.arg.envid) this.arg.envid = 'master';
-        //if (!this.arg.source && this.arg._!='') this.arg.source = this.arg._;
         return true;
     }
 

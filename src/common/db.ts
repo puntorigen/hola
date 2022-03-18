@@ -89,7 +89,6 @@ export class DB {
         const dataKeys = Object.keys(data);
         for (let key of dataKeys) {
             if (!schema.includes(key)) {
-                console.log('schema no incluye key',{schema,key});
                 return false;
             }
         }
@@ -101,7 +100,7 @@ export class DB {
         if (table in this.data.schema) {
             //check that given data fields exist and are of the same type of schema
             const valid = this.validateSchemaKeys(this.data.schema[table],data);
-            console.log('valid data for table',{table,data,valid});
+            //console.log('valid data for table',{table,data,valid});
             if (!valid) return false;
             if (!this.data.values[table]) this.data.values[table]=[];
             this.data.values[table].push(data);

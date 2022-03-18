@@ -72,7 +72,7 @@ export class LinkedIn {
                     //x_console.outT({ message:'Invitation sent to '+perfil.publicIdentifier, color:'green' });
                     await wait(3); //wait 3 seconds between each invitation sent
                     return true;
-                },
+                }.bind(this),
                 chat: async function() {
                     const conversation = await this.client.conversation.getConversations({
                         recipients: perfil.profile.profileId
@@ -81,7 +81,7 @@ export class LinkedIn {
                     //x_console.outT({ message:`${conversation.length} chat messages between ${perfil.publicIdentifier}`, color:'green' });
                     await wait(3);
                     return conversation;
-                },
+                }.bind(this),
                 sendMessage: async function(message) {
                     await this.client.message.sendMessage({
                         profileId: perfil.profile.profileId,
@@ -90,7 +90,7 @@ export class LinkedIn {
                     //x_console.setPrefix({ prefix:'message', color:'cyan' })
                     //x_console.outT({ message:`invitation message sent to ${perfil.publicIdentifier}`, color:'green' });
                     await wait(5); //wait 5sec between sent messages
-                }
+                }.bind(this)
             };
             return resp;
         }).filter((perfil)=>{
