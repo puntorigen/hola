@@ -23,13 +23,16 @@ export default class Grow extends Command {
         //console.log('args',this.arg);
         //const spinner = this.x_console.spinner({ color:'cyan' })
         let db = new DB(); await db.load();
-        //ask what template to use
-        let templates = db.table('templates').map((item)=>({
-            title:item.name,
-            value:item.name,
-            description:'keywords: '+item.keywords
-        }));
-        let template_ = await this.choose('Please choose a template:',templates);
+        let template_;
+        if (!this.arg.template) {
+            //ask what template to use
+            let templates = db.table('templates').map((item)=>({
+                title:item.name,
+                value:item.name,
+                description:'keywords: '+item.keywords
+            }));
+            template_ = await this.choose('Please choose a template:',templates);
+        }
         let template:templatesFields = db.search('templates',{ name:template_ })[0].value;
         const linkedin = new LinkedIn(this.arg.user,this.arg.pass);
         await linkedin.login();

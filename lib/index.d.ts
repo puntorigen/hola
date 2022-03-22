@@ -11,6 +11,10 @@ export default class hola {
     });
     test(arg: any): Promise<void>;
     templates(arg: any): Promise<void>;
+    backup(arg: any): Promise<void>;
+    restore(arg: any): Promise<void>;
     grow(arg: any): Promise<void>;
+    invite(arg: any): Promise<void>;
+    tui(arg: any): Promise<void>;
 }
 //# sourceMappingURL=index.d.ts.map

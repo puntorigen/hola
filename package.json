@@ -34,6 +34,7 @@
     "@concepto/console": "^1.2.67",
     "alasql": "^1.7.3",
     "blessed": "^0.1.81",
+    "blessed-contrib": "^4.11.0",
     "capitalize": "^2.0.4",
     "cli-progress": "^3.9.1",
     "colors": "^1.4.0",

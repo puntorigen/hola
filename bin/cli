@@ -57,17 +57,15 @@ const cmds = require('minimist')(process.argv.slice(2));
         if (x_helper.commands) {
             x_console.out({ message:'Commands:', color:'brightYellow' });
             for (let cmd_ in x_helper.commands) {
-                const usage = x_helper.usage[cmd_];
-                if (usage.length>0) {
-                    let tabs_ = '';
-                    if (x_helper.signatures[cmd_].length<15) {
-                        tabs_ = '\t\t';
-                    } else {
-                        tabs_ = '\t';
-                    }
-                    x_console.out({ message:`${cmd_} ${x_helper.signatures[cmd_]}${tabs_}${x_helper.commands[cmd_]}`, color:'brightCyan' });
+                //const usage = x_helper.usage[cmd_];
+                let breakChar = 32;
+                let fullLength = cmd_.length+1;
+                if (x_helper.signatures[cmd_].length>0) fullLength += x_helper.signatures[cmd_].trim().length;
+                const spaces = ' '.repeat(breakChar-fullLength);
+                if (x_helper.signatures[cmd_].trim().length>0) {
+                    x_console.out({ message:`${cmd_} ${x_helper.signatures[cmd_].trim()}${spaces}${x_helper.commands[cmd_].trim()}`, color:'brightCyan' });
                 } else {
-                    x_console.out({ message:`${cmd_} \t\t\t\t${x_helper.commands[cmd_]}`, color:'brightCyan' });
+                    x_console.out({ message:`${cmd_} ${spaces}${x_helper.commands[cmd_].trim()}`, color:'brightCyan' });
                 }
             }
             console.log('');
@@ -89,6 +87,7 @@ const cmds = require('minimist')(process.argv.slice(2));
             console.log('');
             await x_helper[cmds._[0]](cmds);
         } catch(err_cmd) {
+            console.log('There was an error',err_cmd);
             printUsage();
         }
     }

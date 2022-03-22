@@ -19,18 +19,20 @@ export default class Command {
     spinner(color?: colors): any;
     setColorTokens(colorTokens: colorTokens): void;
 }
-interface options {
+export interface options {
     title: string;
     value: any;
     description?: string;
 }
-declare type colors = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'purple' | 'cyan' | 'white' | 'brightRed';
-interface colorTokens {
+export interface validation {
+    (value: string): boolean | string;
+}
+export declare type colors = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'purple' | 'cyan' | 'white' | 'brightRed';
+export interface colorTokens {
     '*'?: colors;
     '|'?: colors;
     '@'?: colors;
     '#'?: colors;
     '!'?: colors;
 }
-export {};
 //# sourceMappingURL=command.d.ts.map
