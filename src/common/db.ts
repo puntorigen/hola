@@ -44,7 +44,7 @@ export interface profilesFields {
     status: 'invited'|'message_sent'|'answered',
     invitationSent: boolean,
     invitationDate?: Date,
-    messageSent: false,
+    messageSent: boolean,
     messageDate?: Date,
     distance: number,
     dateAdded: Date

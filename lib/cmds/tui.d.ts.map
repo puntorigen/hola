@@ -1,1 +1,1 @@
-{"version":3,"file":"tui.d.ts","sourceRoot":"","sources":["../../src/cmds/tui.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,mBAAmB,CAAA;AAIvC,MAAM,CAAC,OAAO,OAAO,GAAI,SAAQ,OAAO;IAE9B,IAAI;IAWJ,OAAO;CAWhB"}
+{"version":3,"file":"tui.d.ts","sourceRoot":"","sources":["../../src/cmds/tui.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,mBAAmB,CAAA;AAMvC,MAAM,CAAC,OAAO,OAAO,GAAI,SAAQ,OAAO;IACpC,MAAM,EAAC,GAAG,CAAA;IAEJ,IAAI;IAWJ,OAAO;CAoChB"}
