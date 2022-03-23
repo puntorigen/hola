@@ -69,7 +69,7 @@ export default class Invite extends Command {
                         message = message.split(`{${item}}`).join(person[item]);
                     });
                     if (profiles && profiles.length>0) {
-                        this.log(`template to send:`,'yellow',message);
+                        this.log(`sending invitation to *${person.firstName}* ..`);
                         invitations += 1;
                         profiles[0]._update({
                             status: 'message_sent',
@@ -79,14 +79,14 @@ export default class Invite extends Command {
                         } as profilesFields);
                         await person.sendMessage(message);
                         db.save();
-                        this.log(`Message sent! to #${person.firstName} ${person.lastName}#:\n${message}`);
+                        this.log(`Message sent! to #${person.firstName} ${person.lastName}#:\n*${message}*`);
                         //console.log('person '+person.firstName+' '+person.lastName);
                     } else {
                         this.log(`${person.firstName} was not invited by the bot for template @${template_}@; so we won't text him!`,'brightRed');
                     }
                     if (invitations>=template.max_invite) break breakout;
                 } else {
-                    this.log(`${person.firstName} ${person.lastName} has no messages with you.`);
+                    this.log(`${person.firstName} ${person.lastName} has messages with you, so we omit him.`,'green');
                 }
 
             }
