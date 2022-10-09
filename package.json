@@ -34,8 +34,13 @@
     "@concepto/console": "^1.2.67",
     "@types/blessed": "^0.1.19",
     "alasql": "^1.7.3",
+<<<<<<< HEAD
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
+=======
+    "blessed": "*",
+    "blessed-contrib": "*",
+>>>>>>> e43760b7f33d8b96492c7b84d0636bfbac7f61c7
     "capitalize": "^2.0.4",
     "cli-progress": "^3.9.1",
     "colors": "^1.4.0",
@@ -59,7 +64,8 @@
     "temp-dir": "^2.0.0",
     "tiny-cli-editor": "^0.1.1",
     "tiny-timer": "^1.6.0",
-    "ts-enum-util": "^4.0.2"
+    "ts-enum-util": "^4.0.2",
+    "ts-transformer-keys": "^0.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",

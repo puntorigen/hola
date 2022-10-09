@@ -150,7 +150,7 @@ export const command = (desc: String, usage: usage[], signature: any = '') =>
                         //if not, prompt for missing info (simple value)
                         if (!(req in norm) && !ref[key][req].options) {
                             norm[req] = (await prompts({
-                                type: 'text',
+                                type: (ref[key][req].type)?ref[key][req].type:'text',
                                 name: 'value',
                                 message: x_console.colorize(ref[key][req].required)
                             })).value;

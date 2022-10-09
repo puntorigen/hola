@@ -100,6 +100,7 @@ export default class Command {
         if (test.indexOf('error:')!=-1 || test.indexOf('error:')!=-1) params.color = 'brightRed';
         if (data) params.data = data;
         if (color) params.color = color;
+        params.message = this.x_console.colorize(params.message);
         this.x_console.out(params);
     }
 
@@ -130,19 +131,19 @@ export default class Command {
  
 }
 
-interface options {
+export interface options {
     title:string,
     value:any,
     description?:string
 }
 
-interface validation {
+export interface validation {
     (value: string): boolean | string;
 }
 
-type colors = 'black'|'red'|'green'|'yellow'|'blue'|'purple'|'cyan'|'white'|'brightRed';
+export type colors = 'black'|'red'|'green'|'yellow'|'blue'|'purple'|'cyan'|'white'|'brightRed';
 
-interface colorTokens {
+export interface colorTokens {
     '*'?:colors,
     '|'?:colors,
     '@'?:colors,

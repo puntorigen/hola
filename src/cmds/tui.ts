@@ -1,9 +1,19 @@
 import Command from '../common/command'
+<<<<<<< HEAD
 import { DB,schemaTesting } from '../common/db'
 let blessed = require('blessed'), contrib = require('blessed-contrib');
 
 export default class TUI extends Command {
     menu: any 
+=======
+import { LinkedIn,CountryType,LanguageType } from '../common/linkedin'
+let blessed = require('blessed'), contrib = require('blessed-contrib');
+
+
+//opens TUI interface for handling the bot
+export default class Tui extends Command {
+    screen:any
+>>>>>>> e43760b7f33d8b96492c7b84d0636bfbac7f61c7
 
     async init() {
         //@todo read this values from a theme.json file
@@ -16,6 +26,7 @@ export default class TUI extends Command {
         return true;
     }
 
+<<<<<<< HEAD
     async login() {
         let screen = blessed.screen({ smartCSR: true, title:'Linkedin Login' });
         screen.key('q', function () {
@@ -83,6 +94,42 @@ export default class TUI extends Command {
            { type:'textbox', value:'password' }
         ];
         await this.renderForm(login,form);
+=======
+    async process() {
+        //const linkedin = new LinkedIn(this.arg.user,this.arg.pass);
+        //await linkedin.login();
+        //
+        let screen = blessed.screen()
+        screen.title = `Hola LinkedIn BOT`;
+        //escape,q,CTRL-c
+        screen.key(['escape', 'q', 'C-c'], function(ch, key) {
+            process.exit();
+        });
+        let box = blessed.box({
+            top: 'center',
+            left: 'center',
+            width: '50%',
+            height: '50%',
+            content: 'Hello {bold}world{/bold}!',
+            tags: true,
+            border: {
+              type: 'line'
+            },
+            style: {
+              fg: 'white',
+              bg: 'magenta',
+              border: {
+                fg: '#f0f0f0'
+              },
+              hover: {
+                bg: 'green'
+              }
+            }
+          });
+        screen.append(box);
+        screen.render();
+
+>>>>>>> e43760b7f33d8b96492c7b84d0636bfbac7f61c7
     }
 
 }

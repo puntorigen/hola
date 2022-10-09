@@ -6,26 +6,48 @@
 
 import helper from './helper'
 import { CountryType,LanguageType } from '../common/linkedin'
+import { keys } from 'ts-transformer-keys';
 const prompts = require('prompts');
 const query = require('alasql').promise
 const path = require('path');
 const root = require('find-root')(__dirname)
 const helper_ = new helper()
 
-export interface schemaTesting {
+//add table keys below for new tables
+const tables = {
+    testing:    keys<testingFields>(),
+    templates:  keys<templatesFields>(),
+    profiles:   keys<profilesFields>(),
+};
+
+export interface testingFields {
     email: string,
     num:number,
     date:Date
 }
 
-export interface schemaTemplates {
+export interface templatesFields {
+    keywords: string,
     name: string,
     exclude: string,
     country: CountryType[],
-    exclude_people: string,
+    exclude_people: string[],
     max_grow?: number,
     max_invite?: number,
     invitation_message: string[] | string
+}
+export interface profilesFields {
+    firstName: string,
+    lastName: string,
+    sourceUserName: string,
+    templateUsed: string,
+    status: 'invited'|'message_sent'|'answered',
+    invitationSent: boolean,
+    invitationDate?: Date,
+    messageSent: boolean,
+    messageDate?: Date,
+    distance: number,
+    dateAdded: Date
 }
 
 export class DB {
@@ -39,40 +61,12 @@ export class DB {
     }
     
     async init() {
-        if (!this.data.schema['testing']) {
-            this.data.values['testing'] = [];
-            this.data.schema['testing'] = {
-                email:'',
-                num:0,
-                date:new Date()
-            } as schemaTesting;
-        }
-        if (!this.data.schema['templates']) {
-            this.data.values['templates'] = [];
-            this.data.schema['templates'] = {
-                name:'',
-                keywords:'',
-                exclude:'',
-                country:[CountryType.Chile,CountryType.USA,CountryType.Argentina],
-                exclude_people:'',
-                max_grow:5,
-                max_invite:5,
-                invitation_message:''
-            } as schemaTemplates;
-        }
-        if (!this.data.schema['profiles']) this.data.schema['profiles'] = {
-            firstName:'',
-            lastName:'',
-            sourceUserName:'',
-            templateUsed:'',
-            status:['invited','message_sent','answered'],
-            invitationSent: false,
-            invitationDate: new Date(),
-            messageSent: false,
-            messageDate: new Date(),
-            distance: 2,
-            dateAdded: new Date()
-        };
+        Object.keys(tables).map((table)=>{
+            this.data.schema[table] = tables[table]; 
+            if (!this.data.values[table]) {
+                this.data.values[table] = [];
+            }
+        });
         await this.save();
     }
 
@@ -83,51 +77,42 @@ export class DB {
             await this.init();
         } else {
             this.data = await helper_.readFile(file);
+            await this.init();
         }
-        await this.init();
     }
 
     async save() {
         await helper_.writeFile(this.file,JSON.stringify(this.data));
     }
 
-    validateSchema(schema:any,data:any) {
-        const schemaKeys = Object.keys(schema);
-        for (let key of schemaKeys) {
-            if (data[key] && typeof schema[key] !== typeof data[key]) {
-                if (typeof schema[key] == 'object' && typeof data[key] == 'string') {
-                    //test if value of data[key] is within 'object' schema || alternative option
-                    if (schema[key].includes(data[key])) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else if (!data[key]) {
+    validateSchemaKeys(schema:any,data:any) {
+        const dataKeys = Object.keys(data);
+        for (let key of dataKeys) {
+            if (!schema.includes(key)) {
                 return false;
             }
         }
         return true;
     }
 
-    push(table:string,data:any) {
+    add(table:string,data:testingFields|templatesFields|profilesFields) {
         //get table schema
         if (table in this.data.schema) {
             //check that given data fields exist and are of the same type of schema
-            const valid = this.validateSchema(this.data.schema[table],data);
+            const valid = this.validateSchemaKeys(this.data.schema[table],data);
+            //console.log('valid data for table',{table,data,valid});
             if (!valid) return false;
             if (!this.data.values[table]) this.data.values[table]=[];
             this.data.values[table].push(data);
             return true;
         } else {
             //table doesn't exist
+            console.log('table '+table+', doesnt exist');
             return false;
         }
     }
 
-    filter(table:string,filter:any) {
+    search(table:string,filter:any) {
         //ex 'templates', filter:{ country:'Chile' }
         if (!this.data.values[table]) return false;
         let resp = [...this.data.values[table]];
@@ -142,7 +127,7 @@ export class DB {
         resp = resp.map((item)=>{
             return {
                 value:item,
-                update: (data) => {
+                _update: (data) => {
                     this.data.values[table].map((row,idx)=>{
                         if (row==item) this.data.values[table][idx] = {...this.data.values[table][idx],...data};
                     });
@@ -153,7 +138,7 @@ export class DB {
         return resp;
     }
 
-    get(table:string) {
+    table(table:string) {
         if (this.data.schema[table] && !this.data.values[table]) return [];
         if (!this.data.values[table]) return false;
         return this.data.values[table];
