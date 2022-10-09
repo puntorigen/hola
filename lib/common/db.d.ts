@@ -28,7 +28,7 @@ export declare class DB {
     load(file?: string): Promise<void>;
     save(): Promise<void>;
     validateSchema(schema: any, data: any): boolean;
-    push(table: string, data: any): Promise<boolean>;
+    push(table: string, data: any): boolean;
     filter(table: string, filter: any): false | any[];
     get(table: string): any;
     query(sql: string): Promise<any>;

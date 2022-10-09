@@ -25,7 +25,13 @@ export default class hola {
         await (new cmds.TestDB(arg)).run();
     }*/
 
-    @command(`Manage locally saved templates for the BOT to use`,[])
+    @command(`Open interactive terminal user interface`,[],'')
+    async tui(arg: any) {
+        //manage templates: list, create, delete
+        await (new cmds.TUI(arg)).run();
+    }
+
+    @command(`Manage locally saved templates for the BOT to use`,[],'')
     async templates(arg: any) {
         //manage templates: list, create, delete
         await (new cmds.Templates(arg)).run();
@@ -52,76 +58,10 @@ export default class hola {
                 ]
             }]
         ]
-    )
+    ,'[options]\t\t')
     async grow(arg: any) {
         //console.log('usage dump',this.usage);
         await (new cmds.Grow(arg)).run();
     }
 
-    /*
-
-    @command(
-        'Processes the given YML file with definitions',
-        [
-            ['-f','--file', `Specify the YML file to test`,{
-                error:`Error! Required file argument was not specified`,
-                arg:'_'
-            }],
-            [
-                '-nd',
-                '--nodeploy',
-                `Generate new repo and contentful json without deploying it`
-            ],
-            ['-st', '--spacetoken', `Specify the Contentful API TOKEN`,{ 
-                required:'Please enter the *Contentful API Token*:',
-                env:'CONTENTFUL_API'
-            }],
-            ['-g', '--git-user', `Specify the Github username`,{
-                required:`Please enter your #truepill's# *github username*`,
-                env:'GITHUB_USER'
-            }]
-        ],
-        '<file> [options]'
-    )
-    async process(arg: any) {
-        await (new cmds.Process(arg)).run();
-    }
-
-    @command('Creates a new Telehealth project', [
-        [
-            '-n', '--name', `Specifies the new project's name`,{
-                required:`What's the new project's name:`,
-                arg: '_'
-            }
-        ],
-        [
-            '-s', '--source', 'Specifies the source repo (telehealth,telehealth-lite)',{
-                required:`Choose the repo to use as source:`,
-                options: [
-                    {   title:'telehealth', value:'telehealth', description:`Example: yourrelief.com` },
-                    {   title:'telehealth-lite', value:'telehealth-lite', description:`Example: findcovidcare.com` }
-                ]
-            }
-        ],
-        ['-g', '--git-user', `Specify the Github username`,{
-            required:`Please enter your #truepill's# *github username*`,
-            env:'GITHUB_USER'
-        }],        
-        [   '-id', '--spaceid', `Specifies the new contentful space-id`,{
-                required: `Please specify the new contentful space-id:`
-        }]
-    ],'<name> [options]\t')
-    async create(arg: any) {
-        await (new cmds.Create(arg)).run();
-    }
-
-    @command('Clones a given Contentful space into a new one', [
-        [   '-s',   '--source',     'Contentful source space'],
-        [   '-n',   '--name',       `Defines the new space id`,{ required:`What's the name for *new space*:` }],
-        [   '-se',  '--envid',      'Source enviroment Id to use'], //,{ prompt:`What enviroment Id do you wish to use (default:master):`, default:'master' }
-        [   '-st',  '--spacetoken', `Specify the Contentful API TOKEN`,{ required:'Please enter the *Contentful API Token*:', env:'CONTENTFUL_API' }],
-    ],'<source> [options]')
-    async clone(arg: any) {
-        await (new cmds.Clone(arg)).run();
-    }*/
 }
